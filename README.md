@@ -1,6 +1,8 @@
 # Asset Prep Tools — Blender Addon
 
-⚠️ Still in development ⚠️! A single Blender sidebar addon that combines three production utilities into one panel: baking preparation, GLB compression/JSX generation, and image batch conversion.
+⚠️ **Still in development** ⚠️
+
+A single Blender sidebar addon that combines three production utilities into one panel: baking preparation, GLB compression/JSX generation, and image batch conversion.
 
 **Location:** `View3D > Sidebar (N) > Asset Prep`
 
