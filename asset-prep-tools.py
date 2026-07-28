@@ -403,11 +403,12 @@ class GLTF_OT_compress(Operator):
         return {'FINISHED'}
 
     def _build_steps(self, props):
+        # Draco must run last — etc1s/uastc/webp strip Draco compression when rewriting buffers
         steps = []
         if props.use_resize:  steps.append('resize')
-        if props.use_draco:   steps.append('draco')
-        if props.use_ktx2:    steps.append('ktx2')
+        if props.use_ktx2:    steps.append(props.ktx2_codec)  # 'etc1s' or 'uastc'
         elif props.use_webp:  steps.append('webp')
+        if props.use_draco:   steps.append('draco')
         return steps
 
     def _build_cmd(self, props, step, src, dst):
@@ -423,10 +424,10 @@ class GLTF_OT_compress(Operator):
                 '--quantize-color', str(props.draco_color_bits),
                 '--quantize-texcoord', str(props.draco_uv_bits),
             ]
-        elif step == 'ktx2':
-            cmd += ['--codec', props.ktx2_codec]
-            if props.ktx2_codec == 'etc1s':
-                cmd += ['--quality', str(props.ktx2_quality)]
+        elif step == 'etc1s':
+            cmd += ['--quality', str(props.ktx2_quality)]
+        elif step == 'uastc':
+            pass  # uastc uses defaults; add --level 0-4 here if needed
         elif step == 'webp':
             cmd += ['--quality', str(props.webp_quality)]
         return cmd
